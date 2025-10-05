@@ -32,3 +32,15 @@ void setup() {
 }
 //arduino gpio led_buiddin
 // the loop function runs over and over again forever
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
+  digitalWrite(PIN_SPI_MISO, HIGH);  // turn the LED on (HIGH is the voltage level)
+  digitalWrite(PIN_SPI_MOSI, HIGH);  // turn the LED on (HIGH is the voltage level)
+  digitalWrite(PIN_SPI_SS, HIGH);  // turn the LED on (HIGH is the voltage level)
+                       // wait for a second
+  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
+  digitalWrite(PIN_SPI_MISO, LOW);   // turn the LED off by making the voltage LOW
+  digitalWrite(PIN_SPI_MOSI, LOW);   // turn the LED off by making the voltage LOW
+  digitalWrite(PIN_SPI_SS, LOW);   // turn the LED off by making the voltage LOW
+                    // wait for a second
+}
