@@ -41,7 +41,6 @@ unsigned long previousMillis = 0;  // will store last time LED was updated
 // constants won't change:
 const long interval = 0;  // interval at which to blink (milliseconds)
 
-
 void setup() {
   // set the digital pin as output:
   pinMode(ledPin, OUTPUT);
@@ -50,7 +49,7 @@ void setup() {
   pinMode(10, OUTPUT);
 }
 
-oid loop() {
+void loop() {
   // here is where you'd put code that needs to be running all the time.
 
   // check to see if it's time to blink the LED; that is, if the difference
