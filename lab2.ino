@@ -46,3 +46,17 @@ void loop() {
 	if(temperatura < 25){
 		digitalWrite(ledVerde, HIGH);
 		digitalWrite(ledAmarillo, LOW)
+digitalWrite(ledRojo, LOW);
+	}
+	else if (temperatura >= 25 && temperatura < 30){
+		digitalWrite(ledVerde, LOW);
+		digitalWrite(ledAmarillo, HIGH);
+		digitalWrite(ledRojo, LOW);
+	}
+	else{
+		digitalWrite(ledVerde, LOW);
+		digitalWrite(ledAmarillo, LOW);
+		digitalWrite(ledRojo, HIGH);
+	}
+	delay(1000); // medio segundo entre medidas
+}
