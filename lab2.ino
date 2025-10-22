@@ -21,3 +21,16 @@ void setup() {
 	pinMode(ledAmarillo, OUTPUT);
 	pinMode(ledRojo, OUTPUT);
 }
+
+void loop() {
+	// Lee el valor analógico del pin A0 (0..1023)
+	int lecturaADC = analogRead(pinLM35);
+
+	//calcular voltaje (sv de referecncia)
+	const float voltaje = lecturaADC * (5 / 1023.0);
+
+	//convertir a temperatura C (LM35 entrega 10 mV/C)
+	temperatura = voltaje * 100.0; //voltaje * 100
+
+	//Mostrar datos por monitor serial
+	Serial.print("ADC: ");
