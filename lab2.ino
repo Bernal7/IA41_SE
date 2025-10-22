@@ -10,3 +10,14 @@ const int ledRojo = 11;
 float temperatura;
 
 void setup() {
+	// Inicializa la comunicación serial a 9600 baudios
+	Serial.begin(9600);
+	while (!Serial) {
+		; // espera a que el puerto serial se conecte (solo necesario en placas como Leonardo)
+	}
+	Serial.println("LM35 + LEDs - Indicador de Temperatura");
+
+	pinMode(ledVerde, OUTPUT);
+	pinMode(ledAmarillo, OUTPUT);
+	pinMode(ledRojo, OUTPUT);
+}
