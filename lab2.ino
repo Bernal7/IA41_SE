@@ -34,3 +34,15 @@ void loop() {
 
 	//Mostrar datos por monitor serial
 	Serial.print("ADC: ");
+	Serial.print(lecturaADC);
+	Serial.print(" | Voltaje: ");
+	Serial.print(voltaje, 3);
+	Serial.print(" V");
+	Serial.print(" | Temp: ");
+	Serial.print(temperatura, 2);
+	Serial.print(" C\n");
+
+	//Temperatura LEDs segun la temperatura
+	if(temperatura < 25){
+		digitalWrite(ledVerde, HIGH);
+		digitalWrite(ledAmarillo, LOW)
