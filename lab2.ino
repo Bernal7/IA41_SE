@@ -1,4 +1,4 @@
-/ Ejemplo: AnalogReadSerial adaptado para sensor LM35
+// Ejemplo: AnalogReadSerial adaptado para sensor LM35
 // Lee A0, muestra ADC, voltaje y temperatura en grados Celsius.
 
 const int pinLM35 = A0; // Pin analógico donde está conectado el sensor LM35
@@ -12,9 +12,6 @@ float temperatura;
 void setup() {
 	// Inicializa la comunicación serial a 9600 baudios
 	Serial.begin(9600);
-	while (!Serial) {
-		; // espera a que el puerto serial se conecte (solo necesario en placas como Leonardo)
-	}
 	Serial.println("LM35 + LEDs - Indicador de Temperatura");
 
 	pinMode(ledVerde, OUTPUT);
@@ -43,20 +40,24 @@ void loop() {
 	Serial.print(" C\n");
 
 	//Temperatura LEDs segun la temperatura
-	if(temperatura < 25){
+	if(temperatura >= 15 && temperatura <= 25){
 		digitalWrite(ledVerde, HIGH);
-		digitalWrite(ledAmarillo, LOW)
-digitalWrite(ledRojo, LOW);
+		digitalWrite(ledAmarillo, LOW);
+		digitalWrite(ledRojo, LOW);
 	}
-	else if (temperatura >= 25 && temperatura < 30){
+	else if (temperatura > 25 && temperatura <= 35){
 		digitalWrite(ledVerde, LOW);
 		digitalWrite(ledAmarillo, HIGH);
 		digitalWrite(ledRojo, LOW);
 	}
-	else{
+	else if (temperatura > 35){
 		digitalWrite(ledVerde, LOW);
 		digitalWrite(ledAmarillo, LOW);
 		digitalWrite(ledRojo, HIGH);
+	} else {
+		digitalWrite(ledVerde, LOW);
+		digitalWrite(ledAmarillo, LOW);
+		digitalWrite(ledRojo, LOW);
 	}
 	delay(1000); // medio segundo entre medidas
 }
