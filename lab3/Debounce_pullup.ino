@@ -42,6 +42,7 @@ unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
 unsigned long debounceDelay = 50;    // the debounce time; increase if the output flickers
 
 void setup() {
+  Serial.begin(9600);
   pinMode(buttonPin, INPUT);
   pinMode(ledPin, OUTPUT);
 
@@ -52,6 +53,7 @@ void setup() {
 void loop() {
   // read the state of the switch into a local variable:
   int reading = digitalRead(buttonPin);
+  Serial.println(reading);
 
   // check to see if you just pressed the button
   // (i.e. the input went from LOW to HIGH), and you've waited long enough
