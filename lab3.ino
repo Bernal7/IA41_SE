@@ -34,3 +34,12 @@ switch (pullDetection + 1) {
         // turn LED on:
         digitalWrite(13, HIGH);
       } else {
+        // turn LED off:
+        digitalWrite(13, LOW);
+      }
+      break;
+    }
+  }
+
+  delay(500);
+}
