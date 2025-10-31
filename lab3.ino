@@ -28,7 +28,7 @@ switch (pullDetection + 1) {
       }
       break;
     }
-case 2: {
+    case 2: {
       //pull down state
       if (buttonState == LOW) {
         // turn LED on:
