@@ -15,3 +15,16 @@ void loop() {
   Serial.print(" Boton Estado? :");
   Serial.print(pullDetection);
   Serial.print("\n");
+
+switch (pullDetection + 1) {
+    case 1: {
+      //pull up state
+      if (buttonState == HIGH) {
+        // turn LED on:
+        digitalWrite(13, HIGH);
+      } else {
+        // turn LED off:
+        digitalWrite(13, LOW);
+      }
+      break;
+    }
