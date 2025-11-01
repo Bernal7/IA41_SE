@@ -72,7 +72,7 @@ void loop(){
         digitalWrite(ledAmarilloPin, LOW);
         digitalWrite(ledRojoPin, LOW);
 
-      } else if (temperatura >= 26 && < 35) {
+      } else if (temperatura >= 26 && temperatura < 35) {
 
         digitalWrite(ledVerdePin, LOW);
         digitalWrite(ledAmarilloPin, HIGH);
