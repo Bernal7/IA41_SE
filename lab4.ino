@@ -17,3 +17,20 @@ int ledVerdePin = 10;
 int pushed = 0;
 
 DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+
+  Serial.begin(9600);
+
+  pinMode(btnPin, INPUT_PULLUP);
+  pinMode(ledRojoPin, OUTPUT);
+  pinMode(ledAmarilloPin, OUTPUT);
+  pinMode(ledVerdePin, OUTPUT);
+
+  digitalWrite(ledRojoPin, LOW);
+  digitalWrite(ledAmarilloPin, LOW);
+  digitalWrite(ledVerdePin, LOW);
+
+  dht.begin();
+
+}
