@@ -45,3 +45,21 @@ void loop(){
   }
 
   if (pushed == 1) {
+// Esperar 2 segundos entre lecturas
+
+    float humedad = dht.readHumidity();
+
+    float temperatura = dht.readTemperature(); // En °C por defecto
+
+    if (isnan (humedad) || isnan (temperatura)) {
+
+      Serial.println(F("Error al leer el sensor DHT11!"));
+
+    } else {
+      Serial.print(F("Humedad: "));
+
+      Serial.print(humedad);
+
+      Serial.print(F("% Temperatura: "));
+
+      Serial.print(temperatura);
