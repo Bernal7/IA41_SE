@@ -34,3 +34,14 @@ void setup() {
   dht.begin();
 
 }
+
+void loop(){
+  Serial.println(pushed);
+  if (pushed == 0) {
+    if (!digitalRead(btnPin) == HIGH) {
+      Serial.println(F("Iniciando sensor DHT11..."));
+      pushed = 1;
+    }
+  }
+
+  if (pushed == 1) {
