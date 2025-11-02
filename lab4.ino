@@ -63,3 +63,35 @@ void loop(){
       Serial.print(F("% Temperatura: "));
 
       Serial.print(temperatura);
+
+Serial.println(F("°C"));
+
+      if (temperatura >= 15 && temperatura < 26) {
+
+        digitalWrite(ledVerdePin, HIGH);
+        digitalWrite(ledAmarilloPin, LOW);
+        digitalWrite(ledRojoPin, LOW);
+
+      } else if (temperatura >= 26 && temperatura < 35) {
+
+        digitalWrite(ledVerdePin, LOW);
+        digitalWrite(ledAmarilloPin, HIGH);
+        digitalWrite(ledRojoPin, LOW);
+
+      } else if (temperatura >= 35) {
+
+        digitalWrite(ledVerdePin, LOW);
+        digitalWrite(ledAmarilloPin, LOW);
+        digitalWrite(ledRojoPin, HIGH);
+
+      } else {
+
+        digitalWrite(ledVerdePin, LOW);
+        digitalWrite(ledAmarilloPin, LOW);
+        digitalWrite(ledRojoPin, LOW);
+        
+      }
+    }
+  }
+  delay(1000);
+}
