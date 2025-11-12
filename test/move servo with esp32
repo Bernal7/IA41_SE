@@ -1,0 +1,28 @@
+// MAL: #include <Servo.h> 
+#include <ESP32Servo.h> // BIEN: Esta es la librería correcta para ESP32
+
+Servo miServo;  // 2. Crear un objeto para representar el servo
+int pos = 0;    // Variable para almacenar la posición del servo
+
+void setup() {
+  miServo.attach(4);  // 3. Conectar el servo al pin 4 (¡Esto está bien!)
+}
+
+void loop() {
+  const int steper = 2;
+  // Bucle 'for' que va de 0 a 180 grados
+  for (pos = 0; pos <= 180; pos += steper) { 
+    miServo.write(pos); // 4. Escribir la posición en el servo
+    
+    // NOTA: 150ms es un delay muy lento. El barrido tardará 27 segundos.
+    // El original era delay(15); para un movimiento más rápido.
+    // ¡Pero esto no es un error, solo una observación!
+    // delay(1);         
+  }
+
+  // Bucle 'for' que va de 180 a 0 grados
+  for (pos = 180; pos >= 0; pos -= step) { 
+    miServo.write(pos); // Escribir la posición en el servo
+    // delay(1);         
+  }
+}
