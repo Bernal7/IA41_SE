@@ -5,8 +5,8 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-const char* ssid = "MEGACABLE-2.4G-77A5";
-const char* password = "dB44s6td42";
+const char* ssid = "SSID";
+const char* password = "PASSWORD";
 const int ledPin = 2;
 
 void setup() {
