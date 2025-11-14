@@ -9,8 +9,8 @@
 // ===========================
 // Enter your WiFi credentials
 // ===========================
-const char *ssid = "MEGACABLE-2.4G-77A5";
-const char *password = "dB44s6td42";
+const char *ssid = "ssid";
+const char *password = "pswd";
 
 void startCameraServer();
 void setupLedFlash();
@@ -43,21 +43,17 @@ void setup() {
   config.pin_pwdn = PWDN_GPIO_NUM;
   config.pin_reset = RESET_GPIO_NUM;
   config.xclk_freq_hz = 20000000;
-  // Dejamos el resto de los ajustes por defecto por ahora...
   config.pixel_format = PIXFORMAT_JPEG;
 
-
   // ================================================================
-  // !! PRUEBA IMPORTANTE !!
-  // Forzamos el uso de la memoria interna (DRAM) en lugar de PSRAM.
-  // Esto limitará la calidad, pero probará si la PSRAM es el fallo.
+  // !! USANDO EL MODO DRAM PERMANENTEMENTE !!
+  // Esto funcionará, pero con resoluciones más bajas.
   // ================================================================
-  Serial.println("!!! PRUEBA: FORZANDO MODO DRAM (SIN PSRAM) !!!");
-  config.frame_size = FRAMESIZE_SVGA; // (800x600) Tamaño más pequeño
+  Serial.println("!!! USANDO MODO DRAM (SIN PSRAM) !!!");
+  config.frame_size = FRAMESIZE_SVGA; // (800x600)
   config.fb_location = CAMERA_FB_IN_DRAM; // Usar memoria interna
   config.jpeg_quality = 12;
   config.fb_count = 1; // Solo un búfer en DRAM
-
   
   // 3. INTENTAR INICIAR LA CÁMARA
   Serial.println("Intentando esp_camera_init()...");
