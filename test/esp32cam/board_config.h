@@ -11,10 +11,10 @@
 // ===================
 // Select camera model
 // ===================
+// ¡TODOS LOS MODELOS DEBEN ESTAR COMENTADOS!
 //#define CAMERA_MODEL_WROVER_KIT // Has PSRAM
-//#define CAMERA_MODEL_ESP_EYE  // Has PSRAM
-#define CAMERA_MODEL_FREENOVE_S3
-//#define CAMERA_MODEL_ESP32S3_EYE // Has PSRAM
+//#define CAMERA_MODEL_ESP_EYE  // Has PSRAM <-- ESTE ERA TU ERROR
+#define CAMERA_MODEL_ESP32S3_EYE // Has PSRAM
 //#define CAMERA_MODEL_M5STACK_PSRAM // Has PSRAM
 //#define CAMERA_MODEL_M5STACK_V2_PSRAM // M5Camera version B Has PSRAM
 //#define CAMERA_MODEL_M5STACK_WIDE // Has PSRAM
@@ -30,6 +30,34 @@
 //#define CAMERA_MODEL_ESP32S3_CAM_LCD
 //#define CAMERA_MODEL_DFRobot_FireBeetle2_ESP32S3 // Has PSRAM
 //#define CAMERA_MODEL_DFRobot_Romeo_ESP32S3 // Has PSRAM
+
+// ===================
+// MODELO PERSONALIZADO (CUSTOM) PARA FREENOVE S3
+// ===================
+#define CAMERA_MODEL_CUSTOM
+
+// ===================
+// PINOUT MANUAL PARA FREENOVE S3
+// ===================
+#if defined(CAMERA_MODEL_CUSTOM)
+#define PWDN_GPIO_NUM     -1
+#define RESET_GPIO_NUM    -1
+#define XCLK_GPIO_NUM     15
+#define SIOD_GPIO_NUM     4
+#define SIOC_GPIO_NUM     5
+#define Y9_GPIO_NUM       16
+#define Y8_GPIO_NUM       17
+#define Y7_GPIO_NUM       18
+#define Y6_GPIO_NUM       12
+#define Y5_GPIO_NUM       10
+#define Y4_GPIO_NUM       8
+#define Y3_GPIO_NUM       9
+#define Y2_GPIO_NUM       11
+#define VSYNC_GPIO_NUM    6
+#define HREF_GPIO_NUM     7
+#define PCLK_GPIO_NUM     13
+#endif
+
 #include "camera_pins.h"
 
 #endif  // BOARD_CONFIG_H
