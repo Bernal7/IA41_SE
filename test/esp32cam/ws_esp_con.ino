@@ -15,6 +15,8 @@
 #include <WiFi.h>
 #include <WebSocketsClient.h>
 #include <ArduinoJson.h>
+#include <ESP32Servo.h>
+#include <LiquidCrystal_I2C.h> 
 
 // ========================================
 // CONFIGURACIÓN - MODIFICA ESTOS VALORES
@@ -38,11 +40,19 @@ const char* ACCESS_PASSWORD = "4cb4ac4a8fc583ed10fd8295d520c5b4";
 // ========================================
 // CONFIGURACIÓN DE PINES
 // ========================================
-#define LED_GREEN 2   // LED verde para acceso concedido
-#define LED_RED 4     // LED rojo para acceso denegado
-#define RELAY_PIN 5   // Pin del relé (para abrir puerta/cerradura)
-#define BUZZER_PIN 15 // Buzzer ACTIVO para alertas
-#define LED_BLUE 3    // LED azul para indicar conexión/autenticación exitosa
+#define LED_GREEN_BEHIND 2   // LED verde para acceso concedido
+#define LED_RED_BEHIND 1     // LED rojo para acceso denegado
+#define BUZZER_PIN 4         // Buzzer ACTIVO para alertas
+#define LED_BLUE_BEHIND 42   // LED azul para indicar conexión/autenticación exitosa
+#define LED_SERVO 5          // Servo motor pin
+#define LED_RED_FRONTAL 40   // Led frontal rojo
+#define LED_GREEN_FRONTAL 41 // Led frontal verde
+
+Servo servo1;
+const int servo_open = 120;
+const int servo_closed = 0;
+const int servo_steps = 1;
+int servo_status = 0;
 
 // ========================================
 // VARIABLES GLOBALES
@@ -96,11 +106,11 @@ void grantAccess() {
     Serial.println("✅ ACCESO CONCEDIDO - Abriendo puerta...");
     
     // Indicadores visuales
-    digitalWrite(LED_GREEN, HIGH);
-    digitalWrite(LED_RED, LOW);
+    digitalWrite(LED_GREEN_BEHIND, HIGH);
+    digitalWrite(LED_RED_BEHIND, LOW);
+    //120
     
     // Activar relé para abrir puerta
-    digitalWrite(RELAY_PIN, HIGH);
     
     // Melodía de éxito
     buzzerMelodySuccess();
@@ -111,21 +121,32 @@ void grantAccess() {
         webSocket.loop();
         delay(10);
     }
-    
+
+    if (servo_status == 0) {
+        digitalWrite(LED_GREEN_FRONTAL, HIGH);
+        digitalWrite(LED_RED_FRONTAL, LOW);
+        servo_status = 1;
+        for (int i = servo_closed; i < servo_open; i+=servo_steps) {
+            servo1.write(i);
+            delay(25);
+        }
+    }
     // Cerrar
-    digitalWrite(RELAY_PIN, LOW);
-    digitalWrite(LED_GREEN, LOW);
+    // digitalWrite(LED_GREEN_BEHIND, LOW);
 }
 
 void denyAccess() {
     Serial.println("❌ ACCESO DENEGADO - Activando alerta...");
     
     // Indicadores visuales
-    digitalWrite(LED_RED, HIGH);
-    digitalWrite(LED_GREEN, LOW);
+    digitalWrite(LED_RED_BEHIND, HIGH);
+    digitalWrite(LED_GREEN_BEHIND, LOW);
     
     // Melodía de alerta
     buzzerMelodyAlert();
+
+    digitalWrite(LED_GREEN_FRONTAL, LOW);
+    digitalWrite(LED_RED_FRONTAL, HIGH);
     
     // Mantener LED rojo 2 segundos
     unsigned long startTime = millis();
@@ -134,7 +155,19 @@ void denyAccess() {
         delay(10);
     }
     
-    digitalWrite(LED_RED, LOW);
+    digitalWrite(LED_RED_BEHIND, LOW);
+}
+
+void close_door() {
+    if (servo_status == 1) {
+        digitalWrite(LED_GREEN_FRONTAL, LOW);
+        digitalWrite(LED_RED_FRONTAL, LOW);
+        // servo_status = 0;
+        for (int i = servo_open; i > servo_closed; i-=servo_steps) {
+            servo1.write(i);
+            delay(25);
+        }
+    }
 }
 
 // ========================================
@@ -200,14 +233,14 @@ void handleWebSocketMessage(uint8_t* payload, size_t length) {
         Serial.println("========================================");
         
         // Indicador visual
-        digitalWrite(LED_GREEN, HIGH);
+        digitalWrite(LED_GREEN_BEHIND, HIGH);
         delay(1000);
-        digitalWrite(LED_GREEN, LOW);
+        digitalWrite(LED_GREEN_BEHIND, LOW);
 
         // LED azul encendido brevemente para indicar autenticación exitosa
-        digitalWrite(LED_BLUE, HIGH);
+        digitalWrite(LED_BLUE_BEHIND, HIGH);
         delay(1500);
-        digitalWrite(LED_BLUE, LOW);
+        // digitalWrite(LED_BLUE_BEHIND, LOW);
     }
     
     // ===== PONG (RESPUESTA A PING) =====
@@ -246,6 +279,7 @@ void handleWebSocketMessage(uint8_t* payload, size_t length) {
         Serial.println("\n");
         
         // CONTROLAR HARDWARE
+        
         if (valid) {
             grantAccess();
         } else {
@@ -264,9 +298,9 @@ void handleWebSocketMessage(uint8_t* payload, size_t length) {
         // Si es error de autenticación, parpadear LED rojo
         if (strstr(errorMsg, "credential") || strstr(errorMsg, "auth")) {
             for(int i = 0; i < 5; i++) {
-                digitalWrite(LED_RED, HIGH);
+                digitalWrite(LED_RED_BEHIND, HIGH);
                 delay(200);
-                digitalWrite(LED_RED, LOW);
+                digitalWrite(LED_RED_BEHIND, LOW);
                 delay(200);
             }
         }
@@ -283,9 +317,10 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
         case WStype_DISCONNECTED:
             Serial.println("[WS] ❌ Desconectado");
             isAuthenticated = false;
-            digitalWrite(LED_RED, HIGH);
-            delay(100);
-            digitalWrite(LED_RED, LOW);
+            digitalWrite(LED_RED_BEHIND, HIGH);
+            delay(1000);
+            digitalWrite(LED_RED_BEHIND, LOW);
+            digitalWrite(LED_BLUE_BEHIND, LOW);
             break;
             
         case WStype_CONNECTED:
@@ -318,18 +353,21 @@ void setup() {
     Serial.println("========================================");
     
     // Configurar pines
-    pinMode(LED_GREEN, OUTPUT);
-    pinMode(LED_RED, OUTPUT);
-    pinMode(RELAY_PIN, OUTPUT);
+    pinMode(LED_GREEN_BEHIND, OUTPUT);
+    pinMode(LED_RED_BEHIND, OUTPUT);
     pinMode(BUZZER_PIN, OUTPUT);
-    pinMode(LED_BLUE, OUTPUT);
+    pinMode(LED_BLUE_BEHIND, OUTPUT);
+    pinMode(LED_RED_FRONTAL, OUTPUT);
+    pinMode(LED_GREEN_FRONTAL, OUTPUT);
     
     // Asegurarse de que todo esté apagado
-    digitalWrite(LED_GREEN, LOW);
-    digitalWrite(LED_RED, LOW);
-    digitalWrite(RELAY_PIN, LOW);
+    digitalWrite(LED_GREEN_BEHIND, LOW);
+    digitalWrite(LED_RED_BEHIND, LOW);
     digitalWrite(BUZZER_PIN, LOW);
-    digitalWrite(LED_BLUE, LOW);
+    digitalWrite(LED_BLUE_BEHIND, LOW);
+
+    servo1.attach(LED_SERVO, 500, 2400);
+    servo1.write(servo_closed);
     
     delay(1000);
     
@@ -341,19 +379,19 @@ void setup() {
     while (WiFi.status() != WL_CONNECTED && attempts < 30) {
         delay(500);
         Serial.print(".");
-        digitalWrite(LED_RED, !digitalRead(LED_RED)); // Parpadeo
+        digitalWrite(LED_RED_BEHIND, !digitalRead(LED_RED_BEHIND)); // Parpadeo
         attempts++;
     }
     
-    digitalWrite(LED_RED, LOW);
+    digitalWrite(LED_RED_BEHIND, LOW);
     
     if (WiFi.status() != WL_CONNECTED) {
         Serial.println("\n❌ Error: No se pudo conectar a WiFi");
         Serial.println("Verifica SSID y contraseña, luego reinicia el ESP32");
         while(1) {
-            digitalWrite(LED_RED, HIGH);
+            digitalWrite(LED_RED_BEHIND, HIGH);
             delay(200);
-            digitalWrite(LED_RED, LOW);
+            digitalWrite(LED_RED_BEHIND, LOW);
             delay(200);
         }
     }
@@ -367,9 +405,9 @@ void setup() {
     
     // Indicador visual de WiFi conectado
     for(int i = 0; i < 3; i++) {
-        digitalWrite(LED_GREEN, HIGH);
+        digitalWrite(LED_GREEN_BEHIND, HIGH);
         delay(100);
-        digitalWrite(LED_GREEN, LOW);
+        digitalWrite(LED_GREEN_BEHIND, LOW);
         delay(100);
     }
     
