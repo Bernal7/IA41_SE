@@ -13,3 +13,10 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 void setup() {
   lcd.init();
   lcd.backlight();
+
+ dht.begin();
+
+  lcd.setCursor(0,0);
+  lcd.print("Iniciando...");
+  delay(1000);
+}
