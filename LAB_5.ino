@@ -27,3 +27,10 @@ void loop() {
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Temperatura: ");
+
+lcd.setCursor(0,1);
+  // lcd.print(temp);
+  lcd.print("26 C");
+
+  delay(1500);
+}
