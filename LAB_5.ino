@@ -20,3 +20,10 @@ void setup() {
   lcd.print("Iniciando...");
   delay(1000);
 }
+
+void loop() {
+  float temp = dht.readTemperature(); // Celsius
+
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Temperatura: ");
